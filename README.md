@@ -12,7 +12,7 @@ platform :ios, '8.0'
 use_frameworks!
 
 target 'project_name' do
-	pod 'GDPerformanceView', '~> 1.0.0'
+	pod 'GDPerformanceView', '~> 1.0.2'
 end
 ```
 
