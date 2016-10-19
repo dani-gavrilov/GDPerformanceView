@@ -25,11 +25,13 @@
 #import <mach/mach.h>
 #import <QuartzCore/QuartzCore.h>
 
+#import "GDMarginLabel.h"
+
 @interface GDPerformanceView ()
 
 @property (nonatomic, strong) CADisplayLink *displayLink;
 
-@property (nonatomic, strong) UILabel *monitoringTextLabel;
+@property (nonatomic, strong) GDMarginLabel *monitoringTextLabel;
 
 @property (nonatomic) CGFloat lastFPSUsageValue;
 @property (nonatomic) CFTimeInterval displayLinkLastTimestamp;
@@ -81,12 +83,11 @@
 }
 
 - (void)layoutTextLabel {
-    CGFloat labelWidth = CGRectGetWidth(self.monitoringTextLabel.bounds);
-    CGFloat labelHeight = CGRectGetHeight(self.monitoringTextLabel.bounds);
     CGFloat windowWidth = CGRectGetWidth(self.bounds);
     CGFloat windowHeight = CGRectGetHeight(self.bounds);
+    CGSize labelSize = [self.monitoringTextLabel sizeThatFits:CGSizeMake(windowWidth, windowHeight)];
     
-    [self.monitoringTextLabel setFrame:CGRectMake((windowWidth - labelWidth) / 2.0f, (windowHeight - labelHeight) / 2.0f, labelWidth, labelHeight)];
+    [self.monitoringTextLabel setFrame:CGRectMake((windowWidth - labelSize.width) / 2.0f, (windowHeight - labelSize.height) / 2.0f, labelSize.width, labelSize.height)];
 }
 
 #pragma mark -
@@ -135,11 +136,11 @@
 }
 
 - (void)setupTextLayers {
-    self.monitoringTextLabel = [[UILabel alloc] init];
+    self.monitoringTextLabel = [[GDMarginLabel alloc] init];
     [self.monitoringTextLabel setTextAlignment:NSTextAlignmentCenter];
     [self.monitoringTextLabel setNumberOfLines:2];
-    [self.monitoringTextLabel setBackgroundColor:[UIColor whiteColor]];
-    [self.monitoringTextLabel setTextColor:[UIColor blackColor]];
+    [self.monitoringTextLabel setBackgroundColor:[UIColor blackColor]];
+    [self.monitoringTextLabel setTextColor:[UIColor whiteColor]];
     [self.monitoringTextLabel setClipsToBounds:YES];
     [self.monitoringTextLabel setFont:[UIFont systemFontOfSize:8.0f]];
     [self.monitoringTextLabel.layer setBorderWidth:1.0f];
@@ -250,7 +251,7 @@
 #pragma mark - Other Methods
 
 - (void)updateMonitoringLabelWithFPS:(CGFloat)fpsUsage CPU:(CGFloat)cpuUsage RAM:(CGFloat)ramUsage {
-    NSMutableString *monitoringString = [NSMutableString stringWithFormat:@"  FPS : %.1f, CPU : %.1f%%, RAM : %.1f MiB  ", fpsUsage, cpuUsage, ramUsage];
+    NSMutableString *monitoringString = [NSMutableString stringWithFormat:@"FPS : %.1f, CPU : %.1f%%, RAM : %.1f MiB", fpsUsage, cpuUsage, ramUsage];
     if (!self.appVersionHidden) {
         NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
         NSString *build = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
@@ -259,7 +260,6 @@
     }
     
     [self.monitoringTextLabel setText:monitoringString];
-    [self.monitoringTextLabel sizeToFit];
     [self layoutTextLabel];
 }
 

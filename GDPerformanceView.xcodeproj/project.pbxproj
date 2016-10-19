@@ -14,6 +14,7 @@
 		A53761621DB76D81000007B7 /* GDPerformanceMonitor.m in Sources */ = {isa = PBXBuildFile; fileRef = A53761591DB76D81000007B7 /* GDPerformanceMonitor.m */; };
 		A53761631DB76D81000007B7 /* GDPerformanceView.m in Sources */ = {isa = PBXBuildFile; fileRef = A537615B1DB76D81000007B7 /* GDPerformanceView.m */; };
 		A53761651DB76D81000007B7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = A537615D1DB76D81000007B7 /* main.m */; };
+		A5DAC0811DB7B1A600AF26E6 /* GDMarginLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = A5DAC0801DB7B1A600AF26E6 /* GDMarginLabel.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -29,6 +30,8 @@
 		A537615C1DB76D81000007B7 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A537615D1DB76D81000007B7 /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		A5C8CEBE1DB6203D008D8E15 /* GDPerformanceView.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GDPerformanceView.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A5DAC07F1DB7B1A600AF26E6 /* GDMarginLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GDMarginLabel.h; sourceTree = "<group>"; };
+		A5DAC0801DB7B1A600AF26E6 /* GDMarginLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GDMarginLabel.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,6 +67,8 @@
 				A53761591DB76D81000007B7 /* GDPerformanceMonitor.m */,
 				A537615A1DB76D81000007B7 /* GDPerformanceView.h */,
 				A537615B1DB76D81000007B7 /* GDPerformanceView.m */,
+				A5DAC07F1DB7B1A600AF26E6 /* GDMarginLabel.h */,
+				A5DAC0801DB7B1A600AF26E6 /* GDMarginLabel.m */,
 			);
 			path = GDPerformanceMonitoring;
 			sourceTree = "<group>";
@@ -161,6 +166,7 @@
 				A537615E1DB76D81000007B7 /* AppDelegate.m in Sources */,
 				A53761651DB76D81000007B7 /* main.m in Sources */,
 				A53761631DB76D81000007B7 /* GDPerformanceView.m in Sources */,
+				A5DAC0811DB7B1A600AF26E6 /* GDMarginLabel.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
