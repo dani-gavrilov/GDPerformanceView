@@ -27,6 +27,11 @@
 @interface GDPerformanceMonitor : NSObject
 
 /**
+ Change it to hide or show application version from monitoring view. Default is NO.
+ */
+@property (nonatomic, getter=isAppVersionHidden) BOOL appVersionHidden;
+
+/**
  Creates and returns instance of GDPerfomanceMonitor, as singleton.
  */
 + (instancetype)sharedInstance;

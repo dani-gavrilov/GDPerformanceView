@@ -12,7 +12,7 @@ platform :ios, '8.0'
 use_frameworks!
 
 target 'project_name' do
-	pod 'GDPerformanceView', '~> 1.0.3'
+	pod 'GDPerformanceView', '~> 1.0.4'
 end
 ```
 
@@ -68,6 +68,9 @@ Call to hide and pause monitoring.
 	[textLabel setTextColor:[UIColor whiteColor]];
 	[textLabel.layer setBorderColor:[[UIColor blackColor] CGColor]];
 }];
+```
+```
+[self.performanceMonitor setAppVersionHidden:YES]
 ```
 
 ## Requirements

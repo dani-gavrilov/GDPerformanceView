@@ -136,6 +136,8 @@
 
 - (void)setupTextLayers {
     self.monitoringTextLabel = [[UILabel alloc] init];
+    [self.monitoringTextLabel setTextAlignment:NSTextAlignmentCenter];
+    [self.monitoringTextLabel setNumberOfLines:2];
     [self.monitoringTextLabel setBackgroundColor:[UIColor whiteColor]];
     [self.monitoringTextLabel setTextColor:[UIColor blackColor]];
     [self.monitoringTextLabel setClipsToBounds:YES];
@@ -248,7 +250,15 @@
 #pragma mark - Other Methods
 
 - (void)updateMonitoringLabelWithFPS:(CGFloat)fpsUsage CPU:(CGFloat)cpuUsage RAM:(CGFloat)ramUsage {
-    [self.monitoringTextLabel setText:[NSString stringWithFormat:@"  FPS : %.1f, CPU : %.1f%%, RAM : %.1f MiB  ", fpsUsage, cpuUsage, ramUsage]];
+    NSMutableString *monitoringString = [NSMutableString stringWithFormat:@"  FPS : %.1f, CPU : %.1f%%, RAM : %.1f MiB  ", fpsUsage, cpuUsage, ramUsage];
+    if (!self.appVersionHidden) {
+        NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+        NSString *build = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
+        
+        [monitoringString appendString:[NSString stringWithFormat:@"\nversion %@ (%@)", build, version]];
+    }
+    
+    [self.monitoringTextLabel setText:monitoringString];
     [self.monitoringTextLabel sizeToFit];
     [self layoutTextLabel];
 }

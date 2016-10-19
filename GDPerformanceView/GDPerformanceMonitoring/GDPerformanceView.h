@@ -25,6 +25,11 @@
 @interface GDPerformanceView : UIWindow
 
 /**
+ Change it to hide or show application version from monitoring view. Default is NO.
+ */
+@property (nonatomic, getter=isAppVersionHidden) BOOL appVersionHidden;
+
+/**
  Returns weak monitoring text label.
  */
 - (UILabel *)textLabel;

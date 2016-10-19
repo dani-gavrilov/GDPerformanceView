@@ -128,4 +128,15 @@
     self.perfomanceView = [[GDPerformanceView alloc] initWithFrame:statusBarFrame];
 }
 
+#pragma mark -
+#pragma mark - Setters & Getters
+
+- (void)setAppVersionHidden:(BOOL)appVersionHidden {
+    _appVersionHidden = appVersionHidden;
+    
+    if (self.perfomanceView) {
+        [self.perfomanceView setAppVersionHidden:appVersionHidden];
+    }
+}
+
 @end
