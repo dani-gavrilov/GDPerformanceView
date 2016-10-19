@@ -1,7 +1,10 @@
 #GDPerformanceView
-Shows FPS, CPU usage, memory usage above the status bar.
+Shows FPS, CPU usage, memory usage and app version above the status bar.
 
+1. without application versions
 ![Alt text](performance_view.PNG?raw=true "Example PNG")
+2. with application version
+![Alt text](performance_view_2.PNG?raw=true "Example PNG")
 
 ## Installation
 Simply add GDPerformanceMonitoring folder with files to your project, or use CocoaPods.
