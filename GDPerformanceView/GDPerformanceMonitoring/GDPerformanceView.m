@@ -172,9 +172,8 @@
         self.lastUpdateTimestamp = self.displayLinkLastTimestamp;
         
         CGFloat cpu = [self cpuUsage];
-        CGFloat ram = [self ramUsage];
         
-        [self updateMonitoringLabelWithFPS:fps CPU:cpu RAM:ram];
+        [self updateMonitoringLabelWithFPS:fps CPU:cpu];
     }
 }
 
@@ -183,7 +182,7 @@
     task_info_data_t taskInfo;
     mach_msg_type_number_t taskInfoCount;
     
-    taskInfoCount = TASK_BASIC_INFO_COUNT;
+    taskInfoCount = MACH_TASK_BASIC_INFO_COUNT;
     kern = task_info(mach_task_self(), TASK_BASIC_INFO, (task_info_t)taskInfo, &taskInfoCount);
     if (kern != KERN_SUCCESS) {
         return -1;
@@ -230,28 +229,10 @@
     return totalUsageOfCPU;
 }
 
-- (CGFloat)ramUsage {
-    kern_return_t kern;
-    task_info_data_t taskInfo;
-    mach_msg_type_number_t taskInfoCount;
-    
-    taskInfoCount = TASK_BASIC_INFO_COUNT;
-    kern = task_info(mach_task_self(), TASK_BASIC_INFO, (task_info_t)&taskInfo, &taskInfoCount);
-    if (kern != KERN_SUCCESS) {
-        return -1;
-    }
-    
-    task_basic_info_t taskBasicInfo = (task_basic_info_t)taskInfo;
-    
-    CGFloat megabytesUsed = (float)(taskBasicInfo -> resident_size) / 1000000.0f;
-    
-    return megabytesUsed;
-} 
-
 #pragma mark - Other Methods
 
-- (void)updateMonitoringLabelWithFPS:(CGFloat)fpsUsage CPU:(CGFloat)cpuUsage RAM:(CGFloat)ramUsage {
-    NSMutableString *monitoringString = [NSMutableString stringWithFormat:@"FPS : %.1f, CPU : %.1f%%, RAM : %.1f MiB", fpsUsage, cpuUsage, ramUsage];
+- (void)updateMonitoringLabelWithFPS:(CGFloat)fpsUsage CPU:(CGFloat)cpuUsage {
+    NSMutableString *monitoringString = [NSMutableString stringWithFormat:@"FPS : %.1f, CPU : %.1f%%", fpsUsage, cpuUsage];
     if (!self.appVersionHidden) {
         NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
         NSString *build = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];

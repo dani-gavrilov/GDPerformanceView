@@ -1,5 +1,5 @@
 #GDPerformanceView
-Shows FPS, CPU usage, memory usage and app version above the status bar.
+Shows FPS, CPU usage and app version above the status bar.
 
 1. without application versions
 ![Alt text](performance_view.PNG?raw=true "Example PNG")
@@ -15,7 +15,7 @@ platform :ios, '8.0'
 use_frameworks!
 
 target 'project_name' do
-	pod 'GDPerformanceView', '~> 1.0.6'
+	pod 'GDPerformanceView', '~> 1.0.7'
 end
 ```
 
