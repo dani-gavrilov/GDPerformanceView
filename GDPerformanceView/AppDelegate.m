@@ -42,6 +42,8 @@
         [textLabel.layer setBorderColor:[[UIColor blackColor] CGColor]];
     }];
     
+    [[GDPerformanceMonitor sharedInstance] setAppVersionHidden:YES];
+    
 //    [[FSPerfomanceMonitor sharedInstance] startMonitoringWithConfiguration:^(UILabel *textLabel) {
 //        [textLabel setBackgroundColor:[UIColor redColor]];
 //    }];
