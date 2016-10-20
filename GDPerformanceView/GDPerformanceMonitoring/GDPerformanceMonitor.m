@@ -139,4 +139,12 @@
     }
 }
 
+- (void)setDeviceVersionHidden:(BOOL)deviceVersionHidden {
+    _deviceVersionHidden = deviceVersionHidden;
+    
+    if (self.perfomanceView) {
+        [self.perfomanceView setDeviceVersionHidden:deviceVersionHidden];
+    }
+}
+
 @end

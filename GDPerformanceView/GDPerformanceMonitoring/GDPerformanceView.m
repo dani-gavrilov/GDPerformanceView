@@ -232,16 +232,29 @@
 #pragma mark - Other Methods
 
 - (void)updateMonitoringLabelWithFPS:(CGFloat)fpsUsage CPU:(CGFloat)cpuUsage {
-    NSMutableString *monitoringString = [NSMutableString stringWithFormat:@"FPS : %.1f, CPU : %.1f%%", fpsUsage, cpuUsage];
-    if (!self.appVersionHidden) {
-        NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
-        NSString *build = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
-        
-        [monitoringString appendString:[NSString stringWithFormat:@"\nversion %@ (%@)", version, build]];
-    }
+    NSString *versionsString = [self versionsString];
+    NSString *monitoringString = [NSString stringWithFormat:@"FPS : %.1f; CPU : %.1f%%%@", fpsUsage, cpuUsage, versionsString];
     
     [self.monitoringTextLabel setText:monitoringString];
     [self layoutTextLabel];
+}
+
+- (NSString *)versionsString {
+    NSString *versionsString = @"";
+    
+    NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+    NSString *build = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
+    NSString *systemVersion = [[UIDevice currentDevice] systemVersion];
+    
+    if (!self.appVersionHidden && !self.deviceVersionHidden) {
+        versionsString = [NSString stringWithFormat:@"\napp v%@ (%@); iOS v%@", version, build, systemVersion];
+    } else if (!self.appVersionHidden) {
+        versionsString = [NSString stringWithFormat:@"\napp v%@ (%@)", version, build];
+    } else if (!self.deviceVersionHidden) {
+        versionsString = [NSString stringWithFormat:@"\niOS v%@", systemVersion];
+    }
+    
+    return versionsString;
 }
 
 @end

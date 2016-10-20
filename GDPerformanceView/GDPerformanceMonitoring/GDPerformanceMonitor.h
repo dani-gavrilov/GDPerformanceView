@@ -32,6 +32,12 @@
 @property (nonatomic, getter=isAppVersionHidden) BOOL appVersionHidden;
 
 /**
+ Change it to hide or show device iOS version from monitoring view. Default is NO.
+ */
+@property (nonatomic, getter=isDeviceVersionHidden) BOOL deviceVersionHidden;
+
+
+/**
  Creates and returns instance of GDPerfomanceMonitor, as singleton.
  */
 + (instancetype)sharedInstance;

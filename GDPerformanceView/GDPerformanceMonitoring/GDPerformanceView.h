@@ -30,6 +30,12 @@
 @property (nonatomic, getter=isAppVersionHidden) BOOL appVersionHidden;
 
 /**
+ Change it to hide or show device iOS version from monitoring view. Default is NO.
+ */
+@property (nonatomic, getter=isDeviceVersionHidden) BOOL deviceVersionHidden;
+
+
+/**
  Returns weak monitoring text label.
  */
 - (UILabel *)textLabel;
