@@ -237,7 +237,7 @@
         NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
         NSString *build = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
         
-        [monitoringString appendString:[NSString stringWithFormat:@"\nversion %@ (%@)", build, version]];
+        [monitoringString appendString:[NSString stringWithFormat:@"\nversion %@ (%@)", version, build]];
     }
     
     [self.monitoringTextLabel setText:monitoringString];
