@@ -62,6 +62,9 @@ Call to hide and pause monitoring.
 	[textLabel.layer setBorderColor:[[UIColor blackColor] CGColor]];
 }];
 ```
+```
+[self.performanceMonitor setAppVersionHidden:YES]
+```
 
 ### Start monitoring and configure
 
@@ -71,9 +74,6 @@ Call to hide and pause monitoring.
 	[textLabel setTextColor:[UIColor whiteColor]];
 	[textLabel.layer setBorderColor:[[UIColor blackColor] CGColor]];
 }];
-```
-```
-[self.performanceMonitor setAppVersionHidden:YES]
 ```
 
 ## Requirements
