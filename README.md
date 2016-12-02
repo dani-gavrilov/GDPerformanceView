@@ -1,10 +1,10 @@
 #GDPerformanceView
 Shows FPS, CPU usage, app and iOS versions above the status bar.
 
-![Alt text](performance_view.PNG?raw=true "Example PNG")
-![Alt text](performance_view_2.PNG?raw=true "Example PNG")
-![Alt text](performance_view_3.PNG?raw=true "Example PNG")
-![Alt text](performance_view_4.PNG?raw=true "Example PNG")
+![Alt text](https://github.com/dani-gavrilov/GDPerformanceView/blob/master/performance_view.PNG?raw=true "Example PNG")
+![Alt text](https://github.com/dani-gavrilov/GDPerformanceView/blob/master/performance_view_2.PNG?raw=true "Example PNG")
+![Alt text](https://github.com/dani-gavrilov/GDPerformanceView/blob/master/performance_view_3.PNG?raw=true "Example PNG")
+![Alt text](https://github.com/dani-gavrilov/GDPerformanceView/blob/master/performance_view_4.PNG?raw=true "Example PNG")
 
 ## Installation
 Simply add GDPerformanceMonitoring folder with files to your project, or use CocoaPods.
