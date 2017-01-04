@@ -22,9 +22,16 @@
 
 #import <Foundation/Foundation.h>
 
+#import "GDPerformanceMonitorProtocol.h"
+
 @class UILabel;
 
 @interface GDPerformanceMonitor : NSObject
+
+/**
+ GDPerformanceMonitorDelegate delegate.
+ */
+@property (nonatomic, weak) id<GDPerformanceMonitorDelegate> delegate;
 
 /**
  Change it to hide or show application version from monitoring view. Default is NO.
@@ -38,12 +45,12 @@
 
 
 /**
- Creates and returns instance of GDPerfomanceMonitor, as singleton.
+ Creates and returns instance of GDPerformanceMonitor, as singleton.
  */
 + (instancetype)sharedInstance;
 
 /**
- Creates and returns instance of GDPerfomanceMonitor.
+ Creates and returns instance of GDPerformanceMonitor.
  */
 - (instancetype)init NS_DESIGNATED_INITIALIZER;
 
@@ -61,6 +68,11 @@
  Pauses performance monitoring and hides monitoring view.
  */
 - (void)pauseMonitoring;
+
+/**
+ Hides monitoring view.
+ */
+- (void)hideMonitoring;
 
 /**
  Stops and removes monitoring view. Call when you're done with performance monitoring.

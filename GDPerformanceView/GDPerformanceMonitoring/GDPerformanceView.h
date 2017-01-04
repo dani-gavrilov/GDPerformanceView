@@ -22,7 +22,14 @@
 
 #import <UIKit/UIKit.h>
 
+#import "GDPerformanceMonitorProtocol.h"
+
 @interface GDPerformanceView : UIWindow
+
+/**
+ GDPerformanceMonitorDelegate delegate.
+ */
+@property (nonatomic, weak) id<GDPerformanceMonitorDelegate> delegate;
 
 /**
  Change it to hide or show application version from monitoring view. Default is NO.
@@ -48,7 +55,17 @@
 /**
  Resumes performance monitoring and shows monitoring view.
  */
-- (void)resumeMonitoring;
+- (void)resumeMonitoringAndShowMonitoringView:(BOOL)showMonitoringView;
+
+/**
+ Hides monitoring view.
+ */
+- (void)hideMonitoring;
+
+/**
+ Adds monitoring view above the status bar.
+ */
+- (void)addMonitoringViewAboveStatusBar;
 
 /**
  Stops and removes monitoring view. Call when you're done with performance monitoring.

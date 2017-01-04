@@ -18,6 +18,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		428FE57D1E1D19D100F85C8B /* GDPerformanceMonitorProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GDPerformanceMonitorProtocol.h; sourceTree = "<group>"; };
 		A53761501DB76D81000007B7 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		A53761511DB76D81000007B7 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		A53761521DB76D81000007B7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -69,6 +70,7 @@
 				A537615B1DB76D81000007B7 /* GDPerformanceView.m */,
 				A5DAC07F1DB7B1A600AF26E6 /* GDMarginLabel.h */,
 				A5DAC0801DB7B1A600AF26E6 /* GDMarginLabel.m */,
+				428FE57D1E1D19D100F85C8B /* GDPerformanceMonitorProtocol.h */,
 			);
 			path = GDPerformanceMonitoring;
 			sourceTree = "<group>";
@@ -116,12 +118,12 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = GD;
-				LastUpgradeCheck = 0800;
+				LastUpgradeCheck = 0820;
 				ORGANIZATIONNAME = "Gavrilov Daniil";
 				TargetAttributes = {
 					A5C8CEBD1DB6203D008D8E15 = {
 						CreatedOnToolsVersion = 8.0;
-						DevelopmentTeam = 62QHGWVLXD;
+						DevelopmentTeam = RU64C364MT;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -210,6 +212,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -258,6 +261,7 @@
 				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_SUSPICIOUS_MOVES = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
@@ -286,7 +290,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = 62QHGWVLXD;
+				DEVELOPMENT_TEAM = RU64C364MT;
 				INFOPLIST_FILE = GDPerformanceView/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = GD.GDPerformanceView;
@@ -299,7 +303,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = 62QHGWVLXD;
+				DEVELOPMENT_TEAM = RU64C364MT;
 				INFOPLIST_FILE = GDPerformanceView/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = GD.GDPerformanceView;

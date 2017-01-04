@@ -20,11 +20,10 @@
 // THE SOFTWARE.
 //
 
-#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate>
+@protocol GDPerformanceMonitorDelegate <NSObject>
 
-@property (strong, nonatomic) UIWindow *window;
+- (void)performanceMonitorDidReportFPS:(float)fpsValue CPU:(float)cpuValue;
 
 @end
-

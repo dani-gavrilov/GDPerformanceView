@@ -37,6 +37,8 @@
 @property (nonatomic) CFTimeInterval displayLinkLastTimestamp;
 @property (nonatomic) CFTimeInterval lastUpdateTimestamp;
 
+@property (nonatomic) NSString *versionsString;
+
 @end
 
 @implementation GDPerformanceView
@@ -51,6 +53,7 @@
         [self setupDisplayLink];
         [self setupTextLayers];
         [self subscribeToNotifications];
+        [self configureVersionsString];
     }
     return self;
 }
@@ -74,20 +77,12 @@
 #pragma mark -
 #pragma mark - Notifications & Observers
 
-- (void)applicationWillChangeStatusBarFrameNotification:(NSNotification *)notification {
+- (void)applicationWillChangeStatusBarFrame:(NSNotification *)notification {
     dispatch_async(dispatch_get_main_queue(), ^{
         CGRect statusBarFrame = [[UIApplication sharedApplication] statusBarFrame];
         [self setFrame:CGRectMake(0.0f, 0.0f, CGRectGetWidth(statusBarFrame), CGRectGetHeight(statusBarFrame))];
         [self layoutTextLabel];
     });
-}
-
-- (void)layoutTextLabel {
-    CGFloat windowWidth = CGRectGetWidth(self.bounds);
-    CGFloat windowHeight = CGRectGetHeight(self.bounds);
-    CGSize labelSize = [self.monitoringTextLabel sizeThatFits:CGSizeMake(windowWidth, windowHeight)];
-    
-    [self.monitoringTextLabel setFrame:CGRectMake((windowWidth - labelSize.width) / 2.0f, (windowHeight - labelSize.height) / 2.0f, labelSize.width, labelSize.height)];
 }
 
 #pragma mark -
@@ -100,10 +95,28 @@
 
 - (void)pauseMonitoring {
     [self.displayLink setPaused:YES];
+    
+    [self.monitoringTextLabel removeFromSuperview];
 }
 
-- (void)resumeMonitoring {
+- (void)resumeMonitoringAndShowMonitoringView:(BOOL)showMonitoringView {
     [self.displayLink setPaused:NO];
+    
+    if (showMonitoringView) {
+       [self addSubview:self.monitoringTextLabel];
+    }
+}
+
+- (void)hideMonitoring {
+    [self.monitoringTextLabel removeFromSuperview];
+}
+
+- (void)addMonitoringViewAboveStatusBar {
+    if (![self isHidden]) {
+        return;
+    }
+    
+    [self setHidden:NO];
 }
 
 - (void)stopMonitoring {
@@ -127,7 +140,7 @@
     [self setRootViewController:rootViewController];
     [self setWindowLevel:(UIWindowLevelStatusBar + 1.0f)];
     [self setBackgroundColor:[UIColor clearColor]];
-    [self setHidden:NO];
+    [self setHidden:YES];
 }
 
 - (void)setupDisplayLink {
@@ -146,21 +159,20 @@
     [self.monitoringTextLabel.layer setBorderWidth:1.0f];
     [self.monitoringTextLabel.layer setBorderColor:[[UIColor blackColor] CGColor]];
     [self.monitoringTextLabel.layer setCornerRadius:5.0f];
+    
     [self addSubview:self.monitoringTextLabel];
 }
 
 - (void)subscribeToNotifications {
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillChangeStatusBarFrameNotification:) name:UIApplicationWillChangeStatusBarFrameNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillChangeStatusBarFrame:) name:UIApplicationWillChangeStatusBarFrameNotification object:nil];
 }
 
 #pragma mark - Monitoring
 
 - (void)displayLinkAction:(CADisplayLink *)displayLink {
-    CGFloat fps;
-    if (self.lastFPSUsageValue == 0) {
-        fps = roundf(1.0f / (displayLink.timestamp - self.displayLinkLastTimestamp));
-    } else {
-        fps = (self.lastFPSUsageValue + roundf(1.0f / (displayLink.timestamp - self.displayLinkLastTimestamp))) / 2.0f;
+    CGFloat fps = round(1.0f / (displayLink.timestamp - self.displayLinkLastTimestamp));
+    if (self.lastFPSUsageValue != 0.0f) {
+        fps = (self.lastFPSUsageValue + fps) / 2.0f;
     }
     
     self.lastFPSUsageValue = fps;
@@ -173,22 +185,14 @@
         
         CGFloat cpu = [self cpuUsage];
         
+        [self reportFPS:fps CPU:cpu];
         [self updateMonitoringLabelWithFPS:fps CPU:cpu];
     }
 }
 
 - (CGFloat)cpuUsage {
     kern_return_t kern;
-    task_info_data_t taskInfo;
-    mach_msg_type_number_t taskInfoCount;
-    
-    taskInfoCount = MACH_TASK_BASIC_INFO_COUNT;
-    kern = task_info(mach_task_self(), TASK_BASIC_INFO, (task_info_t)taskInfo, &taskInfoCount);
-    if (kern != KERN_SUCCESS) {
-        return -1;
-    }
-    
-    task_basic_info_t taskBasicInfo;
+
     thread_array_t threadList;
     mach_msg_type_number_t threadCount;
     
@@ -197,8 +201,6 @@
     
     thread_basic_info_t threadBasicInfo;
     uint32_t threadStatistic = 0;
-    
-    taskBasicInfo = (task_basic_info_t)taskInfo;
     
     kern = task_threads(mach_task_self(), &threadList, &threadCount);
     if (kern != KERN_SUCCESS) {
@@ -231,30 +233,68 @@
 
 #pragma mark - Other Methods
 
-- (void)updateMonitoringLabelWithFPS:(CGFloat)fpsUsage CPU:(CGFloat)cpuUsage {
-    NSString *versionsString = [self versionsString];
-    NSString *monitoringString = [NSString stringWithFormat:@"FPS : %.1f; CPU : %.1f%%%@", fpsUsage, cpuUsage, versionsString];
+- (void)reportFPS:(CGFloat)fpsValue CPU:(CGFloat)cpuValue {
+    if (!self.delegate || ![self.delegate respondsToSelector:@selector(performanceMonitorDidReportFPS:CPU:)]) {
+        return;
+    }
+    
+    [self.delegate performanceMonitorDidReportFPS:fpsValue CPU:cpuValue];
+}
+
+- (void)updateMonitoringLabelWithFPS:(CGFloat)fpsValue CPU:(CGFloat)cpuValue {
+    NSString *monitoringString = [NSString stringWithFormat:@"FPS : %.1f; CPU : %.1f%%%@", fpsValue, cpuValue, self.versionsString];
     
     [self.monitoringTextLabel setText:monitoringString];
     [self layoutTextLabel];
 }
 
-- (NSString *)versionsString {
-    NSString *versionsString = @"";
+- (void)layoutTextLabel {
+    CGFloat windowWidth = CGRectGetWidth(self.bounds);
+    CGFloat windowHeight = CGRectGetHeight(self.bounds);
+    CGSize labelSize = [self.monitoringTextLabel sizeThatFits:CGSizeMake(windowWidth, windowHeight)];
     
-    NSString *version = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
-    NSString *build = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
-    NSString *systemVersion = [[UIDevice currentDevice] systemVersion];
-    
-    if (!self.appVersionHidden && !self.deviceVersionHidden) {
-        versionsString = [NSString stringWithFormat:@"\napp v%@ (%@); iOS v%@", version, build, systemVersion];
-    } else if (!self.appVersionHidden) {
-        versionsString = [NSString stringWithFormat:@"\napp v%@ (%@)", version, build];
-    } else if (!self.deviceVersionHidden) {
-        versionsString = [NSString stringWithFormat:@"\niOS v%@", systemVersion];
+    [self.monitoringTextLabel setFrame:CGRectMake((windowWidth - labelSize.width) / 2.0f, (windowHeight - labelSize.height) / 2.0f, labelSize.width, labelSize.height)];
+}
+
+- (void)configureVersionsString {
+    if (!self.appVersionHidden || !self.deviceVersionHidden) {
+        NSString *applicationVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+        NSString *applicationBuild = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleVersion"];
+        NSString *systemVersion = [[UIDevice currentDevice] systemVersion];
+        
+        if (!self.appVersionHidden && !self.deviceVersionHidden) {
+            self.versionsString = [NSString stringWithFormat:@"\napp v%@ (%@); iOS v%@", applicationVersion, applicationBuild, systemVersion];
+        } else if (!self.appVersionHidden) {
+            self.versionsString = [NSString stringWithFormat:@"\napp v%@ (%@)", applicationVersion, applicationBuild];
+        } else if (!self.deviceVersionHidden) {
+            self.versionsString = [NSString stringWithFormat:@"\niOS v%@", systemVersion];
+        }
+    } else {
+        self.versionsString = @"";
+    }
+}
+
+#pragma mark -
+#pragma mark - Setters & Getters
+
+- (void)setAppVersionHidden:(BOOL)appVersionHidden {
+    if (appVersionHidden == _appVersionHidden) {
+        return;
     }
     
-    return versionsString;
+    _appVersionHidden = appVersionHidden;
+    
+    [self configureVersionsString];
+}
+
+- (void)setDeviceVersionHidden:(BOOL)deviceVersionHidden {
+    if (deviceVersionHidden == _deviceVersionHidden) {
+        return;
+    }
+    
+    _deviceVersionHidden = deviceVersionHidden;
+    
+    [self configureVersionsString];
 }
 
 @end

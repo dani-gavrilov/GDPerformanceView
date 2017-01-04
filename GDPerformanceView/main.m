@@ -1,6 +1,6 @@
 //
 //  main.m
-//  FSPerfomanceView
+//  FSPerformanceView
 //
 //  Created by Daniil on 18.10.16.
 //  Copyright © 2016 ForaSoft. All rights reserved.

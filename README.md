@@ -15,14 +15,14 @@ platform :ios, '8.0'
 use_frameworks!
 
 target 'project_name' do
-	pod 'GDPerformanceView', '~> 1.1.0'
+	pod 'GDPerformanceView', '~> 1.2.0'
 end
 ```
 
 ## Usage
 
 Simply start monitoring. Performance view will be added above the status bar automatically.
-Also, you can configure appearance as you like.
+Also, you can configure appearance as you like or just hide the monitoring view and use its delegate.
 
 ### Start monitoring
 
@@ -31,8 +31,6 @@ Call to start or resume monitoring and show monitoring view.
 ```
 [[GDPerformanceMonitor sharedInstance] startMonitoring];
 ```
-
-or
 
 ```
 self.performanceMonitor = [GDPerformanceMonitor alloc] init];
@@ -55,6 +53,8 @@ Call to hide and pause monitoring.
 
 ### Configuration
 
+Call to change appearance.
+
 ```
 [self.performanceMonitor configureWithConfiguration:^(UILabel *textLabel) {
 	[textLabel setBackgroundColor:[UIColor blackColor]];
@@ -62,11 +62,20 @@ Call to hide and pause monitoring.
 	[textLabel.layer setBorderColor:[[UIColor blackColor] CGColor]];
 }];
 ```
+
+Call to change output information.
+
 ```
 [self.performanceMonitor setAppVersionHidden:YES]
 ```
 ```
 [self.performanceMonitor setDeviceVersionHidden:YES];
+```
+
+Call to hide monitoring view.
+
+```
+[self.performanceMonitor hideMonitoring];
 ```
 
 ### Start monitoring and configure
@@ -77,6 +86,20 @@ Call to hide and pause monitoring.
 	[textLabel setTextColor:[UIColor whiteColor]];
 	[textLabel.layer setBorderColor:[[UIColor blackColor] CGColor]];
 }];
+```
+
+### Delegate
+
+Set the delegate and implement its method.
+
+```
+[self.performanceMonitor setDelegate:self];
+```
+
+```
+- (void)performanceMonitorDidReportFPS:(float)fpsValue CPU:(float)cpuValue {
+    NSLog(@"%f %f", fpsValue, cpuValue);
+}
 ```
 
 ## Requirements

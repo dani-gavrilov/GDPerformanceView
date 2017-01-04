@@ -26,7 +26,10 @@
 
 @interface GDPerformanceMonitor ()
 
-@property (nonatomic, strong) GDPerformanceView *perfomanceView;
+@property (nonatomic, strong) GDPerformanceView *performanceView;
+
+@property (nonatomic, getter=isPerformanceViewPaused) BOOL performanceViewPaused;
+@property (nonatomic, getter=isPerformanceViewHidden) BOOL performanceViewHidden;
 
 @end
 
@@ -59,54 +62,64 @@
 #pragma mark -
 #pragma mark - Notifications & Observers
 
-- (void)applicationDidBecomeActiveNotification:(NSNotification *)notification {
-    [self.perfomanceView resumeMonitoring];
+- (void)applicationDidBecomeActive:(NSNotification *)notification {
+    if (self.isPerformanceViewPaused) {
+        return;
+    }
+    
+    [self startOrResumeMonitoring];
 }
 
-- (void)applicationWillResignActiveNotification:(NSNotification *)notification {
-    [self.perfomanceView pauseMonitoring];
+- (void)applicationWillResignActive:(NSNotification *)notification {
+    [self.performanceView pauseMonitoring];
 }
 
 #pragma mark - 
 #pragma mark - Public Methods
 
 - (void)startMonitoringWithConfiguration:(void (^)(UILabel *))configuration {
-    if (!self.perfomanceView) {
-       [self setupPerfomanceView];
-    } else {
-        [self.perfomanceView resumeMonitoring];
-    }
+    self.performanceViewPaused = NO;
+    self.performanceViewHidden = NO;
+    
+    [self startOrResumeMonitoring];
     
     if (configuration) {
-        UILabel *textLabel = [self.perfomanceView textLabel];
+        UILabel *textLabel = [self.performanceView textLabel];
         configuration(textLabel);
     }
 }
 
 - (void)startMonitoring {
-    if (!self.perfomanceView) {
-        [self setupPerfomanceView];
-    } else {
-        [self.perfomanceView resumeMonitoring];
-    }
+    self.performanceViewPaused = NO;
+    self.performanceViewHidden = NO;
+    
+    [self startOrResumeMonitoring];
 }
 
 - (void)pauseMonitoring {
-    [self.perfomanceView pauseMonitoring];
+    self.performanceViewPaused = YES;
+    
+    [self.performanceView pauseMonitoring];
+}
+
+- (void)hideMonitoring {
+    self.performanceViewHidden = YES;
+    
+    [self.performanceView hideMonitoring];
 }
 
 - (void)stopMonitoring {
-    [self.perfomanceView stopMonitoring];
-    self.perfomanceView = nil;
+    [self.performanceView stopMonitoring];
+    self.performanceView = nil;
 }
 
 - (void)configureWithConfiguration:(void (^)(UILabel *))configuration {
-    if (!self.perfomanceView) {
+    if (!self.performanceView) {
         return;
     }
     
     if (configuration) {
-        UILabel *textLabel = [self.perfomanceView textLabel];
+        UILabel *textLabel = [self.performanceView textLabel];
         configuration(textLabel);
     }
 }
@@ -117,33 +130,59 @@
 #pragma mark - Default Setups
 
 - (void)subscribeToNotifications {
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActiveNotification:) name:UIApplicationDidBecomeActiveNotification object:nil];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillResignActiveNotification:) name:UIApplicationWillResignActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationDidBecomeActive:) name:UIApplicationDidBecomeActiveNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillResignActive:) name:UIApplicationWillResignActiveNotification object:nil];
 }
 
 #pragma mark - Monitoring 
 
-- (void)setupPerfomanceView {
+- (void)startOrResumeMonitoring {
+    if (!self.performanceView) {
+        [self setupPerformanceView];
+    } else {
+        [self.performanceView resumeMonitoringAndShowMonitoringView:!self.isPerformanceViewHidden];
+    }
+    
+    if ([[UIApplication sharedApplication] applicationState] == UIApplicationStateActive) {
+        [self.performanceView addMonitoringViewAboveStatusBar];
+    }
+}
+
+- (void)setupPerformanceView {
     CGRect statusBarFrame = [[UIApplication sharedApplication] statusBarFrame];
-    self.perfomanceView = [[GDPerformanceView alloc] initWithFrame:statusBarFrame];
+    self.performanceView = [[GDPerformanceView alloc] initWithFrame:statusBarFrame];
+    [self.performanceView setDelegate:self.delegate];
+    
+    if (self.isPerformanceViewPaused) {
+        [self.performanceView pauseMonitoring];
+    }
+    if (self.isPerformanceViewHidden) {
+        [self.performanceView hideMonitoring];
+    }
 }
 
 #pragma mark -
 #pragma mark - Setters & Getters
 
+- (void)setDelegate:(id<GDPerformanceMonitorDelegate>)delegate {
+    _delegate = delegate;
+    
+    [self.performanceView setDelegate:delegate];
+}
+
 - (void)setAppVersionHidden:(BOOL)appVersionHidden {
     _appVersionHidden = appVersionHidden;
     
-    if (self.perfomanceView) {
-        [self.perfomanceView setAppVersionHidden:appVersionHidden];
+    if (self.performanceView) {
+        [self.performanceView setAppVersionHidden:appVersionHidden];
     }
 }
 
 - (void)setDeviceVersionHidden:(BOOL)deviceVersionHidden {
     _deviceVersionHidden = deviceVersionHidden;
     
-    if (self.perfomanceView) {
-        [self.perfomanceView setDeviceVersionHidden:deviceVersionHidden];
+    if (self.performanceView) {
+        [self.performanceView setDeviceVersionHidden:deviceVersionHidden];
     }
 }
 
