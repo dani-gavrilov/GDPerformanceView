@@ -24,6 +24,6 @@
 
 @protocol GDPerformanceMonitorDelegate <NSObject>
 
-- (void)performanceMonitorDidReportFPS:(float)fpsValue CPU:(float)cpuValue;
+- (void)performanceMonitorDidReportFPS:(float)fpsValue CPU:(float)cpuValue usageMem:(float)usageMem freeMem:(float)freeMem;
 
 @end
