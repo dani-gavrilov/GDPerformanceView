@@ -123,8 +123,8 @@
 				TargetAttributes = {
 					A5C8CEBD1DB6203D008D8E15 = {
 						CreatedOnToolsVersion = 8.0;
-						DevelopmentTeam = RU64C364MT;
-						ProvisioningStyle = Automatic;
+						DevelopmentTeam = W7YDEDGW4E;
+						ProvisioningStyle = Manual;
 					};
 				};
 			};
@@ -290,11 +290,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = RU64C364MT;
+				DEVELOPMENT_TEAM = W7YDEDGW4E;
 				INFOPLIST_FILE = GDPerformanceView/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = GD.GDPerformanceView;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "3a51cda8-3387-4c26-a945-c8fb51508664";
+				PROVISIONING_PROFILE_SPECIFIER = "Development: Wildcard";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -303,11 +305,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = RU64C364MT;
+				DEVELOPMENT_TEAM = W7YDEDGW4E;
 				INFOPLIST_FILE = GDPerformanceView/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = GD.GDPerformanceView;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "3a51cda8-3387-4c26-a945-c8fb51508664";
+				PROVISIONING_PROFILE_SPECIFIER = "Development: Wildcard";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;
