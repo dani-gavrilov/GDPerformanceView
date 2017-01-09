@@ -10,7 +10,7 @@ Shows FPS, CPU usage, app and iOS versions above the status bar and report FPS a
 Simply add GDPerformanceMonitoring folder with files to your project, or use CocoaPods.
 
 ### Podfile
-```
+```ruby
 platform :ios, '8.0'
 use_frameworks!
 
@@ -28,11 +28,11 @@ Also, you can configure appearance as you like or just hide the monitoring view 
 
 Call to start or resume monitoring and show monitoring view.
 
-```
+```objective-c
 [[GDPerformanceMonitor sharedInstance] startMonitoring];
 ```
 
-```
+```objective-c
 self.performanceMonitor = [GDPerformanceMonitor alloc] init];
 [self.performanceMonitor startMonitoring];
 ```
@@ -41,13 +41,13 @@ self.performanceMonitor = [GDPerformanceMonitor alloc] init];
 
 Call when you're done with performance monitoring.
 
-```
+```objective-c
 [self.performanceMonitor stopMonitoring];
 ```
 
 Call to hide and pause monitoring.
 
-```
+```objective-c
 [self.performanceMonitor pauseMonitoring];
 ```
 
@@ -55,7 +55,7 @@ Call to hide and pause monitoring.
 
 Call to change appearance.
 
-```
+```objective-c
 [self.performanceMonitor configureWithConfiguration:^(UILabel *textLabel) {
 	[textLabel setBackgroundColor:[UIColor blackColor]];
 	[textLabel setTextColor:[UIColor whiteColor]];
@@ -65,22 +65,22 @@ Call to change appearance.
 
 Call to change output information.
 
-```
+```objective-c
 [self.performanceMonitor setAppVersionHidden:YES]
 ```
-```
+```objective-c
 [self.performanceMonitor setDeviceVersionHidden:YES];
 ```
 
 Call to hide monitoring view.
 
-```
+```objective-c
 [self.performanceMonitor hideMonitoring];
 ```
 
 ### Start monitoring and configure
 
-```
+```objective-c
 [self.performanceMonitor startMonitoringWithConfiguration:^(UILabel *textLabel) {
 	[textLabel setBackgroundColor:[UIColor blackColor]];
 	[textLabel setTextColor:[UIColor whiteColor]];
@@ -92,11 +92,11 @@ Call to hide monitoring view.
 
 Set the delegate and implement its method.
 
-```
+```objective-c
 [self.performanceMonitor setDelegate:self];
 ```
 
-```
+```objective-c
 - (void)performanceMonitorDidReportFPS:(float)fpsValue CPU:(float)cpuValue {
     NSLog(@"%f %f", fpsValue, cpuValue);
 }
