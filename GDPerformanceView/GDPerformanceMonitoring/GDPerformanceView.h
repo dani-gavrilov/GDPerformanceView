@@ -41,6 +41,15 @@
  */
 @property (nonatomic, getter=isDeviceVersionHidden) BOOL deviceVersionHidden;
 
+/**
+ Override this properties to return the desired status bar attributes.
+ 
+ Default prefersStatusBarHidden is false, preferredStatusBarStyle is UIStatusBarStyle.default.
+ */
+@property (nonatomic) BOOL prefersStatusBarHidden;
+
+@property (nonatomic) UIStatusBarStyle preferredStatusBarStyle;
+
 
 /**
  Returns weak monitoring text label.
@@ -66,6 +75,11 @@
  Adds monitoring view above the status bar.
  */
 - (void)addMonitoringViewAboveStatusBar;
+
+/**
+ Configures root view controller with prefersStatusBarHidden and preferredStatusBarStyle.
+ */
+- (void)configureRootViewController;
 
 /**
  Stops and removes monitoring view. Call when you're done with performance monitoring.

@@ -35,7 +35,9 @@
 @property (nonatomic, strong) GDMarginLabel *monitoringTextLabel;
 
 @property (nonatomic) CGFloat lastFPSUsageValue;
+
 @property (nonatomic) CFTimeInterval displayLinkLastTimestamp;
+
 @property (nonatomic) CFTimeInterval lastUpdateTimestamp;
 
 @property (nonatomic) NSString *versionsString;
@@ -124,6 +126,13 @@
     [self setHidden:NO];
 }
 
+- (void)configureRootViewController {
+    GDWindowViewController *rootViewController = [[GDWindowViewController alloc] init];
+    [rootViewController configureStatusBarAppearanceWithPrefersStatusBarHidden:self.prefersStatusBarHidden preferredStatusBarStyle:self.preferredStatusBarStyle];
+    
+    self.rootViewController = rootViewController;
+}
+
 - (void)stopMonitoring {
     [self.displayLink invalidate];
     self.displayLink = nil;
@@ -135,12 +144,14 @@
 #pragma mark - Default Setups
 
 - (void)setupWindowAndDefaultVariables {
+    self.prefersStatusBarHidden = NO;
+    self.preferredStatusBarStyle = UIStatusBarStyleDefault;
+    
     self.lastFPSUsageValue = 0.0f;
     self.displayLinkLastTimestamp = 0.0f;
     self.lastUpdateTimestamp = 0.0f;
     
-    UIViewController *rootViewController = [[GDWindowViewController alloc] init];
-    [rootViewController.view setBackgroundColor:[UIColor clearColor]];
+    GDWindowViewController *rootViewController = [[GDWindowViewController alloc] init];
     
     [self setRootViewController:rootViewController];
     [self setWindowLevel:(UIWindowLevelStatusBar + 1.0f)];

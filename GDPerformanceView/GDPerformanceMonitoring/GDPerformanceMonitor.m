@@ -29,7 +29,12 @@
 @property (nonatomic, strong) GDPerformanceView *performanceView;
 
 @property (nonatomic, getter=isPerformanceViewPaused) BOOL performanceViewPaused;
+
 @property (nonatomic, getter=isPerformanceViewHidden) BOOL performanceViewHidden;
+
+@property (nonatomic) BOOL prefersStatusBarHidden;
+
+@property (nonatomic) UIStatusBarStyle preferredStatusBarStyle;
 
 @end
 
@@ -76,6 +81,13 @@
 
 #pragma mark -
 #pragma mark - Public Methods
+
+- (void)configureStatusBarAppearanceWithPrefersStatusBarHidden:(BOOL)prefersStatusBarHidden preferredStatusBarStyle:(NSInteger)preferredStatusBarStyle {
+    self.prefersStatusBarHidden = prefersStatusBarHidden;
+    self.preferredStatusBarStyle = preferredStatusBarStyle;
+    
+    [self checkAndApplyStatusBarAppearanceWithPrefersStatusBarHidden:prefersStatusBarHidden preferredStatusBarStyle:preferredStatusBarStyle];
+}
 
 - (void)startMonitoringWithConfiguration:(void (^)(UILabel *))configuration {
     self.performanceViewPaused = NO;
@@ -151,12 +163,28 @@
 - (void)setupPerformanceView {
     self.performanceView = [[GDPerformanceView alloc] init];
     [self.performanceView setPerformanceDelegate:self.delegate];
+    [self checkAndApplyStatusBarAppearanceWithPrefersStatusBarHidden:self.prefersStatusBarHidden preferredStatusBarStyle:self.preferredStatusBarStyle];
     
     if (self.isPerformanceViewPaused) {
         [self.performanceView pauseMonitoring];
     }
     if (self.isPerformanceViewHidden) {
         [self.performanceView hideMonitoring];
+    }
+}
+
+#pragma mark - Other Methods
+
+- (void)checkAndApplyStatusBarAppearanceWithPrefersStatusBarHidden:(BOOL)prefersStatusBarHidden preferredStatusBarStyle:(UIStatusBarStyle)preferredStatusBarStyle {
+    if (!self.performanceView) {
+        return;
+    }
+    
+    if (self.performanceView.prefersStatusBarHidden != prefersStatusBarHidden || self.performanceView.preferredStatusBarStyle != preferredStatusBarStyle) {
+        self.performanceView.prefersStatusBarHidden = prefersStatusBarHidden;
+        self.performanceView.preferredStatusBarStyle = preferredStatusBarStyle;
+        
+        [self.performanceView configureRootViewController];
     }
 }
 

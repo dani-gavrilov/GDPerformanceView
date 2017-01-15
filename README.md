@@ -23,7 +23,7 @@ platform :ios, '8.0'
 use_frameworks!
 
 target 'project_name' do
-	pod 'GDPerformanceView', '~> 1.2.4'
+	pod 'GDPerformanceView', '~> 1.2.5'
 end
 ```
 Don't forget to import GDPerformanceView by adding: 
@@ -89,6 +89,12 @@ Call to hide monitoring view.
 
 ```objective-c
 [self.performanceMonitor hideMonitoring];
+```
+
+Call to change status bar appearance.
+
+```objective-c
+[[GDPerformanceMonitor sharedInstance] configureStatusBarAppearanceWithPrefersStatusBarHidden:NO preferredStatusBarStyle:UIStatusBarStyleLightContent];
 ```
 
 #### Start monitoring and configure

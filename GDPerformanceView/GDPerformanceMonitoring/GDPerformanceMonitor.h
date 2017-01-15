@@ -55,6 +55,13 @@
 - (instancetype)init NS_DESIGNATED_INITIALIZER;
 
 /**
+ Overrides prefersStatusBarHidden and preferredStatusBarStyle properties to return the desired status bar attributes.
+ 
+ Default prefersStatusBarHidden is NO, preferredStatusBarStyle is UIStatusBarStyleDefault.
+ */
+- (void)configureStatusBarAppearanceWithPrefersStatusBarHidden:(BOOL)prefersStatusBarHidden preferredStatusBarStyle:(NSInteger)preferredStatusBarStyle;
+
+/**
  Starts or resumes performance monitoring, initialize monitoring view if not initialized and shows monitoring view. Use configuration block to change appearance as you like.
  */
 - (void)startMonitoringWithConfiguration:(void (^)(UILabel *textLabel))configuration;
