@@ -46,8 +46,8 @@
 #pragma mark -
 #pragma mark - Init Methods & Superclass Overriders
 
-- (instancetype)initWithFrame:(CGRect)frame {
-    self = [super initWithFrame:frame];
+- (instancetype)init {
+    self = [super initWithFrame:[GDPerformanceView windowFrame]];
     if (self) {
         [self setupWindowAndDefaultVariables];
         [self setupDisplayLink];
@@ -56,6 +56,12 @@
         [self configureVersionsString];
     }
     return self;
+}
+
+- (void)layoutSubviews {
+    [super layoutSubviews];
+    
+    [self layoutWindow];
 }
 
 - (void)becomeKeyWindow {
@@ -79,9 +85,7 @@
 
 - (void)applicationWillChangeStatusBarFrame:(NSNotification *)notification {
     dispatch_async(dispatch_get_main_queue(), ^{
-        CGRect statusBarFrame = [[UIApplication sharedApplication] statusBarFrame];
-        [self setFrame:CGRectMake(0.0f, 0.0f, CGRectGetWidth(statusBarFrame), CGRectGetHeight(statusBarFrame))];
-        [self layoutTextLabel];
+        [self layoutWindow];
     });
 }
 
@@ -103,7 +107,7 @@
     [self.displayLink setPaused:NO];
     
     if (showMonitoringView) {
-       [self addSubview:self.monitoringTextLabel];
+        [self addSubview:self.monitoringTextLabel];
     }
 }
 
@@ -140,6 +144,7 @@
     [self setRootViewController:rootViewController];
     [self setWindowLevel:(UIWindowLevelStatusBar + 1.0f)];
     [self setBackgroundColor:[UIColor clearColor]];
+    [self setClipsToBounds:YES];
     [self setHidden:YES];
 }
 
@@ -192,7 +197,7 @@
 
 - (CGFloat)cpuUsage {
     kern_return_t kern;
-
+    
     thread_array_t threadList;
     mach_msg_type_number_t threadCount;
     
@@ -233,12 +238,21 @@
 
 #pragma mark - Other Methods
 
++ (CGRect)windowFrame {
+    CGRect frame = CGRectZero;
+    UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
+    if (window) {
+        frame = CGRectMake(0.0f, 0.0f, CGRectGetWidth(window.bounds), 20.0f);
+    }
+    return frame;
+}
+
 - (void)reportFPS:(CGFloat)fpsValue CPU:(CGFloat)cpuValue {
-    if (!self.delegate || ![self.delegate respondsToSelector:@selector(performanceMonitorDidReportFPS:CPU:)]) {
+    if (!self.performanceDelegate || ![self.performanceDelegate respondsToSelector:@selector(performanceMonitorDidReportFPS:CPU:)]) {
         return;
     }
     
-    [self.delegate performanceMonitorDidReportFPS:fpsValue CPU:cpuValue];
+    [self.performanceDelegate performanceMonitorDidReportFPS:fpsValue CPU:cpuValue];
 }
 
 - (void)updateMonitoringLabelWithFPS:(CGFloat)fpsValue CPU:(CGFloat)cpuValue {
@@ -254,6 +268,11 @@
     CGSize labelSize = [self.monitoringTextLabel sizeThatFits:CGSizeMake(windowWidth, windowHeight)];
     
     [self.monitoringTextLabel setFrame:CGRectMake((windowWidth - labelSize.width) / 2.0f, (windowHeight - labelSize.height) / 2.0f, labelSize.width, labelSize.height)];
+}
+
+- (void)layoutWindow {
+    [self setFrame:[GDPerformanceView windowFrame]];
+    [self layoutTextLabel];
 }
 
 - (void)configureVersionsString {

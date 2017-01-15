@@ -74,7 +74,7 @@
     [self.performanceView pauseMonitoring];
 }
 
-#pragma mark - 
+#pragma mark -
 #pragma mark - Public Methods
 
 - (void)startMonitoringWithConfiguration:(void (^)(UILabel *))configuration {
@@ -134,7 +134,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(applicationWillResignActive:) name:UIApplicationWillResignActiveNotification object:nil];
 }
 
-#pragma mark - Monitoring 
+#pragma mark - Monitoring
 
 - (void)startOrResumeMonitoring {
     if (!self.performanceView) {
@@ -149,9 +149,8 @@
 }
 
 - (void)setupPerformanceView {
-    CGRect statusBarFrame = [[UIApplication sharedApplication] statusBarFrame];
-    self.performanceView = [[GDPerformanceView alloc] initWithFrame:statusBarFrame];
-    [self.performanceView setDelegate:self.delegate];
+    self.performanceView = [[GDPerformanceView alloc] init];
+    [self.performanceView setPerformanceDelegate:self.delegate];
     
     if (self.isPerformanceViewPaused) {
         [self.performanceView pauseMonitoring];
@@ -167,7 +166,7 @@
 - (void)setDelegate:(id<GDPerformanceMonitorDelegate>)delegate {
     _delegate = delegate;
     
-    [self.performanceView setDelegate:delegate];
+    [self.performanceView setPerformanceDelegate:delegate];
 }
 
 - (void)setAppVersionHidden:(BOOL)appVersionHidden {

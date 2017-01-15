@@ -29,7 +29,7 @@
 /**
  GDPerformanceMonitorDelegate delegate.
  */
-@property (nonatomic, weak) id<GDPerformanceMonitorDelegate> delegate;
+@property (nonatomic, weak) id<GDPerformanceMonitorDelegate> performanceDelegate;
 
 /**
  Change it to hide or show application version from monitoring view. Default is NO.
