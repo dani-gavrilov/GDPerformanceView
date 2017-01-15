@@ -94,7 +94,7 @@ Call to hide monitoring view.
 Call to change status bar appearance.
 
 ```objective-c
-[[GDPerformanceMonitor sharedInstance] configureStatusBarAppearanceWithPrefersStatusBarHidden:NO preferredStatusBarStyle:UIStatusBarStyleLightContent];
+[self.performanceMonitor configureStatusBarAppearanceWithPrefersStatusBarHidden:NO preferredStatusBarStyle:UIStatusBarStyleLightContent];
 ```
 
 #### Start monitoring and configure
