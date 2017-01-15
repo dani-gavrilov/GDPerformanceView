@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4277368A1E2BD55100E59793 /* GDWindowViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 427736891E2BD55100E59793 /* GDWindowViewController.m */; };
 		A537615E1DB76D81000007B7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = A53761511DB76D81000007B7 /* AppDelegate.m */; };
 		A537615F1DB76D81000007B7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A53761521DB76D81000007B7 /* Assets.xcassets */; };
 		A53761601DB76D81000007B7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A53761531DB76D81000007B7 /* LaunchScreen.storyboard */; };
@@ -18,6 +19,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		427736881E2BD55100E59793 /* GDWindowViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GDWindowViewController.h; sourceTree = "<group>"; };
+		427736891E2BD55100E59793 /* GDWindowViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GDWindowViewController.m; sourceTree = "<group>"; };
 		428FE57D1E1D19D100F85C8B /* GDPerformanceMonitorProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GDPerformanceMonitorProtocol.h; sourceTree = "<group>"; };
 		A53761501DB76D81000007B7 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		A53761511DB76D81000007B7 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -70,6 +73,8 @@
 				A537615B1DB76D81000007B7 /* GDPerformanceView.m */,
 				A5DAC07F1DB7B1A600AF26E6 /* GDMarginLabel.h */,
 				A5DAC0801DB7B1A600AF26E6 /* GDMarginLabel.m */,
+				427736881E2BD55100E59793 /* GDWindowViewController.h */,
+				427736891E2BD55100E59793 /* GDWindowViewController.m */,
 				428FE57D1E1D19D100F85C8B /* GDPerformanceMonitorProtocol.h */,
 			);
 			path = GDPerformanceMonitoring;
@@ -165,6 +170,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A53761621DB76D81000007B7 /* GDPerformanceMonitor.m in Sources */,
+				4277368A1E2BD55100E59793 /* GDWindowViewController.m in Sources */,
 				A537615E1DB76D81000007B7 /* AppDelegate.m in Sources */,
 				A53761651DB76D81000007B7 /* main.m in Sources */,
 				A53761631DB76D81000007B7 /* GDPerformanceView.m in Sources */,

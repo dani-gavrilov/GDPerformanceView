@@ -26,6 +26,7 @@
 #import <QuartzCore/QuartzCore.h>
 
 #import "GDMarginLabel.h"
+#import "GDWindowViewController.h"
 
 @interface GDPerformanceView ()
 
@@ -138,7 +139,7 @@
     self.displayLinkLastTimestamp = 0.0f;
     self.lastUpdateTimestamp = 0.0f;
     
-    UIViewController *rootViewController = [[UIViewController alloc] init];
+    UIViewController *rootViewController = [[GDWindowViewController alloc] init];
     [rootViewController.view setBackgroundColor:[UIColor clearColor]];
     
     [self setRootViewController:rootViewController];

@@ -23,7 +23,7 @@ platform :ios, '8.0'
 use_frameworks!
 
 target 'project_name' do
-	pod 'GDPerformanceView', '~> 1.2.3'
+	pod 'GDPerformanceView', '~> 1.2.4'
 end
 ```
 Don't forget to import GDPerformanceView by adding: 
