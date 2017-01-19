@@ -116,8 +116,8 @@ Set the delegate and implement its method.
 ```
 
 ```objective-c
-- (void)performanceMonitorDidReportFPS:(float)fpsValue CPU:(float)cpuValue {
-    NSLog(@"%f %f", fpsValue, cpuValue);
+- (void)performanceMonitorDidReportFPS:(int)fpsValue CPU:(float)cpuValue {
+    NSLog(@"%d %f", fpsValue, cpuValue);
 }
 ```
 

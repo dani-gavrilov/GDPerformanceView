@@ -148,7 +148,7 @@
     self.preferredStatusBarStyle = UIStatusBarStyleDefault;
     self.screenUpdatesCount = 0;
     self.screenUpdatesBeginTime = 0.0f;
-    self.averageScreenUpdatesTime = 0.17f;
+    self.averageScreenUpdatesTime = 0.017f;
     
     GDWindowViewController *rootViewController = [[GDWindowViewController alloc] init];
     
