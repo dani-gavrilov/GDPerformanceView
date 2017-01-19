@@ -34,11 +34,11 @@
 
 @property (nonatomic, strong) GDMarginLabel *monitoringTextLabel;
 
-@property (nonatomic) CGFloat lastFPSUsageValue;
+@property (nonatomic) int screenUpdatesCount;
 
-@property (nonatomic) CFTimeInterval displayLinkLastTimestamp;
+@property (nonatomic) CFTimeInterval screenUpdatesBeginTime;
 
-@property (nonatomic) CFTimeInterval lastUpdateTimestamp;
+@property (nonatomic) CFTimeInterval averageScreenUpdatesTime;
 
 @property (nonatomic) NSString *versionsString;
 
@@ -146,10 +146,9 @@
 - (void)setupWindowAndDefaultVariables {
     self.prefersStatusBarHidden = NO;
     self.preferredStatusBarStyle = UIStatusBarStyleDefault;
-    
-    self.lastFPSUsageValue = 0.0f;
-    self.displayLinkLastTimestamp = 0.0f;
-    self.lastUpdateTimestamp = 0.0f;
+    self.screenUpdatesCount = 0;
+    self.screenUpdatesBeginTime = 0.0f;
+    self.averageScreenUpdatesTime = 0.17f;
     
     GDWindowViewController *rootViewController = [[GDWindowViewController alloc] init];
     
@@ -187,27 +186,36 @@
 #pragma mark - Monitoring
 
 - (void)displayLinkAction:(CADisplayLink *)displayLink {
-    CGFloat fps = round(1.0f / (displayLink.timestamp - self.displayLinkLastTimestamp));
-    if (self.lastFPSUsageValue != 0.0f) {
-        fps = (self.lastFPSUsageValue + fps) / 2.0f;
-    }
-    
-    self.lastFPSUsageValue = fps;
-    self.displayLinkLastTimestamp = displayLink.timestamp;
-    
-    CFTimeInterval timestampSinceLastUpdate = self.displayLinkLastTimestamp - self.lastUpdateTimestamp;
-    if (timestampSinceLastUpdate >= 1.0f) {
-        self.lastFPSUsageValue = 0.0f;
-        self.lastUpdateTimestamp = self.displayLinkLastTimestamp;
+    if (self.screenUpdatesBeginTime == 0.0f) {
+        self.screenUpdatesBeginTime = displayLink.timestamp;
+    } else {
+        self.screenUpdatesCount += 1;
         
-        CGFloat cpu = [self cpuUsage];
+        CFTimeInterval screenUpdatesTime = self.displayLink.timestamp - self.screenUpdatesBeginTime;
         
-        [self reportFPS:fps CPU:cpu];
-        [self updateMonitoringLabelWithFPS:fps CPU:cpu];
+        if (screenUpdatesTime >= 1.0) {
+            CFTimeInterval updatesOverSecond = screenUpdatesTime - 1.0f;
+            int framesOverSecond = updatesOverSecond / self.averageScreenUpdatesTime;
+            
+            self.screenUpdatesCount -= framesOverSecond;
+            
+            [self takeReadings];
+        }
     }
 }
 
-- (CGFloat)cpuUsage {
+- (void)takeReadings {
+    int fps = self.screenUpdatesCount;
+    float cpu = [self cpuUsage];
+    
+    self.screenUpdatesCount = 0;
+    self.screenUpdatesBeginTime = 0.0f;
+    
+    [self reportFPS:fps CPU:cpu];
+    [self updateMonitoringLabelWithFPS:fps CPU:cpu];
+}
+
+- (float)cpuUsage {
     kern_return_t kern;
     
     thread_array_t threadList;
@@ -259,7 +267,7 @@
     return frame;
 }
 
-- (void)reportFPS:(CGFloat)fpsValue CPU:(CGFloat)cpuValue {
+- (void)reportFPS:(int)fpsValue CPU:(float)cpuValue {
     if (!self.performanceDelegate || ![self.performanceDelegate respondsToSelector:@selector(performanceMonitorDidReportFPS:CPU:)]) {
         return;
     }
@@ -267,8 +275,8 @@
     [self.performanceDelegate performanceMonitorDidReportFPS:fpsValue CPU:cpuValue];
 }
 
-- (void)updateMonitoringLabelWithFPS:(CGFloat)fpsValue CPU:(CGFloat)cpuValue {
-    NSString *monitoringString = [NSString stringWithFormat:@"FPS : %.1f; CPU : %.1f%%%@", fpsValue, cpuValue, self.versionsString];
+- (void)updateMonitoringLabelWithFPS:(int)fpsValue CPU:(float)cpuValue {
+    NSString *monitoringString = [NSString stringWithFormat:@"FPS : %d; CPU : %.1f%%%@", fpsValue, cpuValue, self.versionsString];
     
     [self.monitoringTextLabel setText:monitoringString];
     [self layoutTextLabel];

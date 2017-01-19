@@ -128,7 +128,6 @@
 				TargetAttributes = {
 					A5C8CEBD1DB6203D008D8E15 = {
 						CreatedOnToolsVersion = 8.0;
-						DevelopmentTeam = RU64C364MT;
 						ProvisioningStyle = Automatic;
 					};
 				};
@@ -296,7 +295,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = RU64C364MT;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = GDPerformanceView/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = GD.GDPerformanceView;
@@ -309,7 +308,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				DEVELOPMENT_TEAM = RU64C364MT;
+				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = GDPerformanceView/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = GD.GDPerformanceView;
