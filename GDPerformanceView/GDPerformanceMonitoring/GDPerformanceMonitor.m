@@ -1,5 +1,5 @@
 //
-// Copyright © 2016 Gavrilov Daniil
+// Copyright © 2017 Gavrilov Daniil
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -31,6 +31,8 @@
 @property (nonatomic, getter=isPerformanceViewPaused) BOOL performanceViewPaused;
 
 @property (nonatomic, getter=isPerformanceViewHidden) BOOL performanceViewHidden;
+
+@property (nonatomic, getter=isPerformanceViewStopped) BOOL performanceViewStopped;
 
 @property (nonatomic) BOOL prefersStatusBarHidden;
 
@@ -92,6 +94,7 @@
 - (void)startMonitoringWithConfiguration:(void (^)(UILabel *))configuration {
     self.performanceViewPaused = NO;
     self.performanceViewHidden = NO;
+    self.performanceViewStopped = NO;
     
     [self startOrResumeMonitoring];
     
@@ -104,6 +107,7 @@
 - (void)startMonitoring {
     self.performanceViewPaused = NO;
     self.performanceViewHidden = NO;
+    self.performanceViewStopped = NO;
     
     [self startOrResumeMonitoring];
 }
@@ -121,6 +125,8 @@
 }
 
 - (void)stopMonitoring {
+    self.performanceViewStopped = YES;
+    
     [self.performanceView stopMonitoring];
     self.performanceView = nil;
 }
@@ -161,7 +167,13 @@
 }
 
 - (void)setupPerformanceView {
+    if (self.isPerformanceViewStopped) {
+        return;
+    }
+    
     self.performanceView = [[GDPerformanceView alloc] init];
+    [self.performanceView setAppVersionHidden:self.appVersionHidden];
+    [self.performanceView setDeviceVersionHidden:self.deviceVersionHidden];
     [self.performanceView setPerformanceDelegate:self.delegate];
     [self checkAndApplyStatusBarAppearanceWithPrefersStatusBarHidden:self.prefersStatusBarHidden preferredStatusBarStyle:self.preferredStatusBarStyle];
     

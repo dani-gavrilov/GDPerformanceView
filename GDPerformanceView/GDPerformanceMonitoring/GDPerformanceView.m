@@ -1,5 +1,5 @@
 //
-// Copyright © 2016 Gavrilov Daniil
+// Copyright © 2017 Gavrilov Daniil
 //
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
@@ -198,6 +198,9 @@
             int framesOverSecond = updatesOverSecond / self.averageScreenUpdatesTime;
             
             self.screenUpdatesCount -= framesOverSecond;
+            if (self.screenUpdatesCount < 0) {
+                self.screenUpdatesCount = 0;
+            }
             
             [self takeReadings];
         }
@@ -276,7 +279,7 @@
 }
 
 - (void)updateMonitoringLabelWithFPS:(int)fpsValue CPU:(float)cpuValue {
-    NSString *monitoringString = [NSString stringWithFormat:@"FPS : %d; CPU : %.1f%%%@", fpsValue, cpuValue, self.versionsString];
+    NSString *monitoringString = [NSString stringWithFormat:@"FPS : %d CPU : %.1f%%%@", fpsValue, cpuValue, self.versionsString];
     
     [self.monitoringTextLabel setText:monitoringString];
     [self layoutTextLabel];
@@ -302,7 +305,7 @@
         NSString *systemVersion = [[UIDevice currentDevice] systemVersion];
         
         if (!self.appVersionHidden && !self.deviceVersionHidden) {
-            self.versionsString = [NSString stringWithFormat:@"\napp v%@ (%@); iOS v%@", applicationVersion, applicationBuild, systemVersion];
+            self.versionsString = [NSString stringWithFormat:@"\napp v%@ (%@) iOS v%@", applicationVersion, applicationBuild, systemVersion];
         } else if (!self.appVersionHidden) {
             self.versionsString = [NSString stringWithFormat:@"\napp v%@ (%@)", applicationVersion, applicationBuild];
         } else if (!self.deviceVersionHidden) {
