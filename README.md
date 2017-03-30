@@ -1,7 +1,7 @@
 #GDPerformanceView
 Shows FPS, CPU usage, app and iOS versions above the status bar and report FPS and CPU usage via delegate.
 
-[![Pod Version](https://img.shields.io/badge/Pod-1.3.0-6193DF.svg)](https://cocoapods.org/)
+[![Pod Version](https://img.shields.io/badge/Pod-1.3.1-6193DF.svg)](https://cocoapods.org/)
 ![Swift Version](https://img.shields.io/badge/xCode-8.2+-blue.svg) 
 ![Swift Version](https://img.shields.io/badge/iOS-8.0+-blue.svg) 
 ![Plaform](https://img.shields.io/badge/Platform-iOS-lightgrey.svg)
@@ -23,7 +23,7 @@ platform :ios, '8.0'
 use_frameworks!
 
 target 'project_name' do
-	pod 'GDPerformanceView', '~> 1.3.0'
+	pod 'GDPerformanceView', '~> 1.3.1'
 end
 ```
 Don't forget to import GDPerformanceView by adding: 
