@@ -43,6 +43,11 @@
  */
 @property (nonatomic, getter=isDeviceVersionHidden) BOOL deviceVersionHidden;
 
+/**
+ Change it to update the time interval between each report. Default is 1 sec.
+ Minimum value is 0.5 sec.
+ */
+@property (nonatomic) NSTimeInterval updateTimeInterval;
 
 /**
  Creates and returns instance of GDPerformanceMonitor, as singleton.

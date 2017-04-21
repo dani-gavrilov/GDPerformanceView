@@ -149,6 +149,7 @@
     self.screenUpdatesCount = 0;
     self.screenUpdatesBeginTime = 0.0f;
     self.averageScreenUpdatesTime = 0.017f;
+    self.updateTimeInterval = 1.0f;
     
     GDWindowViewController *rootViewController = [[GDWindowViewController alloc] init];
     
@@ -193,22 +194,14 @@
         
         CFTimeInterval screenUpdatesTime = self.displayLink.timestamp - self.screenUpdatesBeginTime;
         
-        if (screenUpdatesTime >= 1.0) {
-            CFTimeInterval updatesOverSecond = screenUpdatesTime - 1.0f;
-            int framesOverSecond = updatesOverSecond / self.averageScreenUpdatesTime;
-            
-            self.screenUpdatesCount -= framesOverSecond;
-            if (self.screenUpdatesCount < 0) {
-                self.screenUpdatesCount = 0;
-            }
-            
+        if (screenUpdatesTime >= self.updateTimeInterval) {
             [self takeReadings];
         }
     }
 }
 
 - (void)takeReadings {
-    int fps = self.screenUpdatesCount;
+    int fps = self.screenUpdatesCount / (self.displayLink.timestamp - self.screenUpdatesBeginTime);
     float cpu = [self cpuUsage];
     
     self.screenUpdatesCount = 0;

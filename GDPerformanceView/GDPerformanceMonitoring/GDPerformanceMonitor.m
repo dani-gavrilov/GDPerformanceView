@@ -57,6 +57,7 @@
 - (instancetype)init {
     self = [super init];
     if (self) {
+        self.updateTimeInterval = 1.0f;
         [self subscribeToNotifications];
     }
     return self;
@@ -175,6 +176,7 @@
     [self.performanceView setAppVersionHidden:self.appVersionHidden];
     [self.performanceView setDeviceVersionHidden:self.deviceVersionHidden];
     [self.performanceView setPerformanceDelegate:self.delegate];
+    [self.performanceView setUpdateTimeInterval:self.updateTimeInterval];
     [self checkAndApplyStatusBarAppearanceWithPrefersStatusBarHidden:self.prefersStatusBarHidden preferredStatusBarStyle:self.preferredStatusBarStyle];
     
     if (self.isPerformanceViewPaused) {
@@ -225,4 +227,11 @@
     }
 }
 
+- (void)setUpdateTimeInterval:(NSTimeInterval)updateTimeInterval {
+    _updateTimeInterval = updateTimeInterval;
+    
+    if (self.performanceView) {
+        [self.performanceView setUpdateTimeInterval:updateTimeInterval];
+    }
+}
 @end
