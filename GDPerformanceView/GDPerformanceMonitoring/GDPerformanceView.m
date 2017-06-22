@@ -210,12 +210,21 @@
 - (void)takeReadings {
     int fps = self.screenUpdatesCount;
     float cpu = [self cpuUsage];
+    int64_t memory = [self memoryUsage];
     
     self.screenUpdatesCount = 0;
     self.screenUpdatesBeginTime = 0.0f;
     
-    [self reportFPS:fps CPU:cpu];
-    [self updateMonitoringLabelWithFPS:fps CPU:cpu];
+    [self reportFPS:fps CPU:cpu MEMORY:memory];
+    [self updateMonitoringLabelWithFPS:fps CPU:cpu MEMORY:memory];
+}
+
+- (int64_t)memoryUsage {
+    struct task_basic_info info;
+    mach_msg_type_number_t size = sizeof(info);
+    kern_return_t kern = task_info(mach_task_self(), TASK_BASIC_INFO, (task_info_t)&info, &size);
+    if (kern != KERN_SUCCESS) return -1;
+    return info.resident_size;
 }
 
 - (float)cpuUsage {
@@ -270,16 +279,17 @@
     return frame;
 }
 
-- (void)reportFPS:(int)fpsValue CPU:(float)cpuValue {
-    if (!self.performanceDelegate || ![self.performanceDelegate respondsToSelector:@selector(performanceMonitorDidReportFPS:CPU:)]) {
+- (void)reportFPS:(int)fpsValue CPU:(float)cpuValue MEMORY:(int64_t)memory{
+    if (!self.performanceDelegate || ![self.performanceDelegate respondsToSelector:@selector(performanceMonitorDidReportFPS:CPU:MEMORY:)]) {
         return;
     }
     
-    [self.performanceDelegate performanceMonitorDidReportFPS:fpsValue CPU:cpuValue];
+    [self.performanceDelegate performanceMonitorDidReportFPS:fpsValue CPU:cpuValue MEMORY:memory];
 }
 
-- (void)updateMonitoringLabelWithFPS:(int)fpsValue CPU:(float)cpuValue {
-    NSString *monitoringString = [NSString stringWithFormat:@"FPS : %d CPU : %.1f%%%@", fpsValue, cpuValue, self.versionsString];
+- (void)updateMonitoringLabelWithFPS:(int)fpsValue CPU:(float)cpuValue MEMORY:(int64_t)memory {
+    NSString *mem = [self getMemoryString:memory];
+    NSString *monitoringString = [NSString stringWithFormat:@"FPS : %d CPU : %.1f%%%@%@", fpsValue, cpuValue, mem, self.versionsString];
     
     [self.monitoringTextLabel setText:monitoringString];
     [self layoutTextLabel];
@@ -314,6 +324,25 @@
     } else {
         self.versionsString = @"";
     }
+}
+
+- (NSString *)getMemoryString:(int64_t)memory
+{
+    NSString *memstr = @"";
+    
+    if (!self.memoryUsageHidden) {
+        if (memory < 1024) {
+            memstr = [NSString stringWithFormat:@" MEM : %lldB", memory];
+        } else if (memory < 1024*1024) {
+            memstr = [NSString stringWithFormat:@" MEM : %.1fKB", memory/1024.0f];
+        } else if (memory < 1024*1024*1024) {
+            memstr = [NSString stringWithFormat:@" MEM : %.1fMB", memory/(1024.0f*1024.0f)];
+        } else {
+            memstr = [NSString stringWithFormat:@" MEM : %.2fGB", memory/(1024.0f*1024.0f*1024.0f)];
+        }
+    }
+    
+    return memstr;
 }
 
 #pragma mark -

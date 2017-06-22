@@ -174,6 +174,7 @@
     self.performanceView = [[GDPerformanceView alloc] init];
     [self.performanceView setAppVersionHidden:self.appVersionHidden];
     [self.performanceView setDeviceVersionHidden:self.deviceVersionHidden];
+    [self.performanceView setMemoryUsageHidden:self.memoryUsageHidden];
     [self.performanceView setPerformanceDelegate:self.delegate];
     [self checkAndApplyStatusBarAppearanceWithPrefersStatusBarHidden:self.prefersStatusBarHidden preferredStatusBarStyle:self.preferredStatusBarStyle];
     
@@ -222,6 +223,14 @@
     
     if (self.performanceView) {
         [self.performanceView setDeviceVersionHidden:deviceVersionHidden];
+    }
+}
+
+- (void)setMemoryUsageHidden:(BOOL)memoryUsageHidden {
+    _memoryUsageHidden = memoryUsageHidden;
+    
+    if (self.performanceView) {
+        [self.performanceView setMemoryUsageHidden:memoryUsageHidden];
     }
 }
 

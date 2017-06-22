@@ -42,6 +42,11 @@
 @property (nonatomic, getter=isDeviceVersionHidden) BOOL deviceVersionHidden;
 
 /**
+ Change it to hide or show application memory usage from monitoring view. Default is NO.
+ */
+@property (nonatomic, getter=isMemoryUsageHidden) BOOL memoryUsageHidden;
+
+/**
  Override this properties to return the desired status bar attributes.
  
  Default prefersStatusBarHidden is false, preferredStatusBarStyle is UIStatusBarStyle.default.
