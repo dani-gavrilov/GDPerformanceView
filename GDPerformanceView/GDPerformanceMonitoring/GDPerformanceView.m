@@ -28,6 +28,8 @@
 #import "GDMarginLabel.h"
 #import "GDWindowViewController.h"
 
+static const CGFloat kDefaultHeight = 20.f;
+
 @interface GDPerformanceView ()
 
 @property (nonatomic, strong) CADisplayLink *displayLink;
@@ -265,7 +267,7 @@
     CGRect frame = CGRectZero;
     UIWindow *window = [[[UIApplication sharedApplication] delegate] window];
     if (window) {
-        frame = CGRectMake(0.0f, 0.0f, CGRectGetWidth(window.bounds), 20.0f);
+        frame = CGRectMake(0.0f, 0.0f, CGRectGetWidth(window.bounds), kDefaultHeight);
     }
     return frame;
 }
@@ -287,15 +289,38 @@
 
 - (void)layoutTextLabel {
     CGFloat windowWidth = CGRectGetWidth(self.bounds);
-    CGFloat windowHeight = CGRectGetHeight(self.bounds);
-    CGSize labelSize = [self.monitoringTextLabel sizeThatFits:CGSizeMake(windowWidth, windowHeight)];
-    
-    [self.monitoringTextLabel setFrame:CGRectMake((windowWidth - labelSize.width) / 2.0f, (windowHeight - labelSize.height) / 2.0f, labelSize.width, labelSize.height)];
+    CGSize labelSize = [self.monitoringTextLabel sizeThatFits:CGSizeMake(windowWidth, kDefaultHeight)];
+    CGFloat safeAreaOffset = [self safeAreaTopMargin];
+
+    CGRect frame = CGRectMake((windowWidth - labelSize.width) / 2.0f,
+                              safeAreaOffset + ((kDefaultHeight - labelSize.height) / 2.0f),
+                              labelSize.width,
+                              labelSize.height);
+    [self.monitoringTextLabel setFrame:frame];
 }
 
 - (void)layoutWindow {
-    [self setFrame:[GDPerformanceView windowFrame]];
+    CGRect frame = [GDPerformanceView windowFrame];
+    frame.size.height += [self safeAreaTopMargin];
+    [self setFrame:frame];
     [self layoutTextLabel];
+}
+
+- (CGFloat)safeAreaTopMargin {
+    CGFloat safeAreaTopMargin = 0;
+
+    SEL safeAreaInsetsSel = sel_getUid("safeAreaInsets");
+    NSMethodSignature* methodSignature = [self methodSignatureForSelector:safeAreaInsetsSel];
+    if (methodSignature && ([methodSignature methodReturnLength] == sizeof(UIEdgeInsets))) {
+        NSInvocation* invocation = [NSInvocation invocationWithMethodSignature:methodSignature];
+        invocation.selector = safeAreaInsetsSel;
+        [invocation invokeWithTarget:self];
+        UIEdgeInsets safeAreaInsets;
+        [invocation getReturnValue:&safeAreaInsets];
+        safeAreaTopMargin = safeAreaInsets.top;
+    }
+
+    return safeAreaTopMargin;
 }
 
 - (void)configureVersionsString {
