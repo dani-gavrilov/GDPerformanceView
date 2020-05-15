@@ -37,7 +37,7 @@
     [[GDPerformanceMonitor sharedInstance] startMonitoring];
     [[GDPerformanceMonitor sharedInstance] configureWithConfiguration:^(UILabel *textLabel) {
         [textLabel setBackgroundColor:[UIColor blackColor]];
-        [textLabel setTextColor:[UIColor whiteColor]];
+        [textLabel setTextColor:[UIColor greenColor]];
         [textLabel.layer setBorderColor:[[UIColor blackColor] CGColor]];
     }];
 #endif

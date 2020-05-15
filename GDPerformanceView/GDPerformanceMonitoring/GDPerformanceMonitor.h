@@ -43,6 +43,10 @@
  */
 @property (nonatomic, getter=isDeviceVersionHidden) BOOL deviceVersionHidden;
 
+/**
+ Change it to hide or show application memory usage from monitoring view. Default is NO.
+ */
+@property (nonatomic, getter=isMemoryUsageHidden) BOOL memoryUsageHidden;
 
 /**
  Creates and returns instance of GDPerformanceMonitor, as singleton.
